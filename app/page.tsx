@@ -4,6 +4,8 @@ import dynamic from "next/dynamic";
 import { motion, type Variants } from "motion/react";
 import { ArrowDownToLine } from "lucide-react";
 import MagneticButton from "@/components/Hero/MagneticButton";
+import Timeline from "@/components/Journey/Timeline";
+import FloatingSkills from "@/components/Skills/FloatingSkills";
 
 const ParticleBackground = dynamic(
   () => import("@/components/Hero/ParticleBackground"),
@@ -30,10 +32,11 @@ const nameLetter: Variants = {
 
 export default function Home() {
   return (
-    <section
-      id="home"
-      className="relative h-screen w-full overflow-hidden bg-background"
-    >
+    <main>
+      <section
+        id="home"
+        className="relative h-screen w-full overflow-hidden bg-background"
+      >
       <div className="absolute inset-0 z-0">
         <ParticleBackground />
       </div>
@@ -144,7 +147,11 @@ export default function Home() {
           />
         </div>
       </motion.div>
-    </section>
+      </section>
+
+      <Timeline />
+      <FloatingSkills />
+    </main>
   );
 }
 

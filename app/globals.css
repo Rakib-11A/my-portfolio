@@ -44,6 +44,9 @@
     color-scheme: dark;
     scroll-behavior: smooth;
     -webkit-tap-highlight-color: transparent;
+    /* Required by Motion's useScroll: the root scroll container needs a
+       non-static position so it can compute target offsets correctly. */
+    position: relative;
   }
 
   body {
