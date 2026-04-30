@@ -81,7 +81,7 @@ export default function Navbar() {
       >
         <nav
           aria-label="Primary"
-          className="glass flex items-center gap-1 rounded-full px-2 py-2 shadow-[0_8px_40px_-12px_rgba(0,0,0,0.6)]"
+          className="glass flex w-full max-w-xl items-center gap-1 rounded-full px-2 py-2 shadow-[0_8px_40px_-12px_rgba(0,0,0,0.6)]"
         >
           <a
             href="#home"
@@ -92,7 +92,7 @@ export default function Navbar() {
             </span>
           </a>
 
-          <ul className="hidden items-center gap-0.5 md:flex">
+          <ul className="ml-auto hidden items-center gap-0.5 md:flex">
             {NAV_LINKS.map((link) => (
               <li key={link.href}>
                 <motion.a

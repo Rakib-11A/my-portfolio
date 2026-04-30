@@ -127,7 +127,13 @@ function ContactTerminalImpl() {
 
   /* ── Boot trigger via whileInView ─────────────────────────────────────── */
   useEffect(() => {
-    if (inView && phase === "idle") setPhase(prefersReducedMotion ? "ready" : "booting");
+    if (!inView || phase !== "idle") return;
+
+    const timer = window.setTimeout(() => {
+      setPhase(prefersReducedMotion ? "ready" : "booting");
+    }, 0);
+
+    return () => window.clearTimeout(timer);
   }, [inView, phase, prefersReducedMotion]);
 
   /* ── Typed boot sequence ──────────────────────────────────────────────── */
@@ -176,10 +182,6 @@ function ContactTerminalImpl() {
     },
     [],
   );
-
-  const pushLog = useCallback((tone: LogTone, text: string) => {
-    setLogs((prev) => [...prev, { id: prev.length + 1, tone, text }]);
-  }, []);
 
   /* ── Validation ───────────────────────────────────────────────────────── */
   const validate = useCallback((state: FormState): string | null => {
@@ -253,7 +255,7 @@ function ContactTerminalImpl() {
       ref={sectionRef}
       className="relative isolate w-full overflow-hidden bg-black px-4 py-24 sm:px-6 md:py-32"
     >
-      <MeshGradientBackground />
+      <VoidAtmosphere />
 
       <div className="relative z-10 mx-auto max-w-5xl">
         <Eyebrow />
@@ -264,14 +266,14 @@ function ContactTerminalImpl() {
           transition={{ type: "spring", stiffness: 160, damping: 22, mass: 0.85 }}
           className={[
             "relative overflow-hidden rounded-2xl",
-            "border border-[#E2E8F0]/15",
-            "bg-[rgba(6,6,8,0.75)] backdrop-blur-2xl",
-            "shadow-[0_40px_120px_-30px_rgba(0,0,0,0.95),inset_0_1px_0_rgba(226,232,240,0.08)]",
+            "border border-[#E2E8F0]/18",
+            "bg-zinc-950/70 backdrop-blur-2xl",
+            "shadow-[0_36px_120px_-46px_rgba(212,175,55,0.22),0_28px_92px_-52px_rgba(16,185,129,0.18),0_40px_120px_-30px_rgba(0,0,0,0.98),inset_0_1px_0_rgba(226,232,240,0.12),inset_0_0_0_1px_rgba(255,255,255,0.025)]",
             "will-change-transform",
           ].join(" ")}
           style={{
             backgroundImage:
-              "linear-gradient(180deg, rgba(20,20,28,0.55) 0%, rgba(6,6,8,0.85) 100%)",
+              "linear-gradient(180deg, rgba(24,24,27,0.62) 0%, rgba(9,9,11,0.78) 100%)",
           }}
         >
           {/* Metallic top edge */}
@@ -839,34 +841,19 @@ const LogConsole = memo(function LogConsole({
 });
 
 /* ========================================================================== */
-/*  Mesh-gradient background — slow, ambient                                  */
+/*  Void atmosphere — static, low-frequency ambient haze                      */
 /* ========================================================================== */
 
-const MeshGradientBackground = memo(function MeshGradientBackground() {
-  const prefersReducedMotion = useReducedMotion();
+const VoidAtmosphere = memo(function VoidAtmosphere() {
   return (
-    <div aria-hidden className="pointer-events-none absolute inset-0 z-0 overflow-hidden">
-      <div className="absolute inset-0 mesh-gradient-base" />
-      <motion.div
-        className="absolute inset-[-20%] mesh-gradient-drift"
-        animate={
-          prefersReducedMotion
-            ? undefined
-            : { x: ["-3%", "3%", "-3%"], y: ["2%", "-2%", "2%"], rotate: [0, 8, 0] }
-        }
-        transition={{ duration: 32, ease: "easeInOut", repeat: Infinity }}
+    <div aria-hidden className="pointer-events-none absolute inset-0 z-0 overflow-hidden bg-black">
+      <div
+        className="absolute left-1/2 top-1/2 h-[min(72rem,130vw)] w-[min(72rem,130vw)] -translate-x-1/2 -translate-y-1/2 rounded-full blur-3xl"
+        style={{
+          background:
+            "radial-gradient(circle at center, rgba(212,175,55,0.055) 0%, rgba(16,185,129,0.035) 34%, rgba(0,0,0,0) 68%)",
+        }}
       />
-      <motion.div
-        className="absolute inset-[-25%] mesh-gradient-drift-alt"
-        animate={
-          prefersReducedMotion
-            ? undefined
-            : { x: ["4%", "-4%", "4%"], y: ["-2%", "3%", "-2%"], rotate: [0, -6, 0] }
-        }
-        transition={{ duration: 48, ease: "easeInOut", repeat: Infinity }}
-      />
-      {/* Vignette so the terminal sits on a darker base */}
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_30%,rgba(0,0,0,0.85)_85%)]" />
     </div>
   );
 });

@@ -4,10 +4,12 @@ import dynamic from "next/dynamic";
 import { motion, type Variants } from "motion/react";
 import { ArrowDownToLine } from "lucide-react";
 import MagneticButton from "@/components/Hero/MagneticButton";
+import HeroPortrait from "@/components/Hero/HeroPortrait";
 import Timeline from "@/components/Journey/Timeline";
 import FloatingSkills from "@/components/Skills/FloatingSkills";
 import ProjectRow from "@/components/projects/ProjectRow";
 import ContactTerminal from "@/components/Contact/ContactTerminal";
+import Footer from "@/components/Footer";
 
 const ParticleBackground = dynamic(
   () => import("@/components/Hero/ParticleBackground"),
@@ -48,6 +50,8 @@ export default function Home() {
         aria-hidden
         className="pointer-events-none absolute inset-0 z-5 bg-[radial-gradient(ellipse_at_center,transparent_30%,rgba(5,5,5,0.85)_85%)]"
       />
+
+      <HeroPortrait imageSrc="/assets/profile.png" />
 
       <div className="pointer-events-none relative z-10 flex h-full flex-col items-center justify-center px-6 text-center">
         <motion.p
@@ -155,9 +159,9 @@ export default function Home() {
       <FloatingSkills />
 
       <section
-        id="archive"
+        id="projects"
         aria-label="The Technical Archive"
-        className="relative px-6 py-24 md:py-32"
+        className="relative bg-black px-6 pt-24 md:pt-32"
       >
         <div className="mx-auto max-w-6xl">
           <header className="mb-16 flex flex-col items-center gap-3">
@@ -177,6 +181,8 @@ export default function Home() {
           <ContactTerminal />
         </div>
       </section>
+      {/* <ContactTerminal /> */}
+      <Footer />
     </main>
   );
 }
