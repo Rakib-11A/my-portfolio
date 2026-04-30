@@ -178,9 +178,10 @@ export default function Home() {
           </header>
 
           <ProjectRow />
+          <ContactTerminal />
         </div>
       </section>
-      <ContactTerminal />
+      {/* <ContactTerminal /> */}
       <Footer />
     </main>
   );
