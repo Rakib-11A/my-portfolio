@@ -4,6 +4,10 @@ import dynamic from "next/dynamic";
 import { motion, type Variants } from "motion/react";
 import { ArrowDownToLine } from "lucide-react";
 import MagneticButton from "@/components/Hero/MagneticButton";
+import Timeline from "@/components/Journey/Timeline";
+import FloatingSkills from "@/components/Skills/FloatingSkills";
+import ProjectRow from "@/components/projects/ProjectRow";
+import ContactTerminal from "@/components/Contact/ContactTerminal";
 
 const ParticleBackground = dynamic(
   () => import("@/components/Hero/ParticleBackground"),
@@ -30,10 +34,11 @@ const nameLetter: Variants = {
 
 export default function Home() {
   return (
-    <section
-      id="home"
-      className="relative h-screen w-full overflow-hidden bg-background"
-    >
+    <main>
+      <section
+        id="home"
+        className="relative h-screen w-full overflow-hidden bg-background"
+      >
       <div className="absolute inset-0 z-0">
         <ParticleBackground />
       </div>
@@ -144,7 +149,35 @@ export default function Home() {
           />
         </div>
       </motion.div>
-    </section>
+      </section>
+
+      <Timeline />
+      <FloatingSkills />
+
+      <section
+        id="archive"
+        aria-label="The Technical Archive"
+        className="relative px-6 py-24 md:py-32"
+      >
+        <div className="mx-auto max-w-6xl">
+          <header className="mb-16 flex flex-col items-center gap-3">
+            <span className="mb-3 text-xs uppercase tracking-[0.28em] text-gold/80">
+              The Technical Archive
+            </span>
+            <h2 className="font-display text-4xl font-bold leading-tight tracking-tight text-foreground sm:text-5xl lg:text-6xl">
+              Production systems, dissected.
+            </h2>
+            <p className="max-w-2xl text-center mb-8 text-sm text-muted md:text-base">
+              Curated case studies — three per page. Each card opens a deep
+              dive into the architecture, trade-offs, and operating posture.
+            </p>
+          </header>
+
+          <ProjectRow />
+          <ContactTerminal />
+        </div>
+      </section>
+    </main>
   );
 }
 

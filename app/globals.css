@@ -44,6 +44,9 @@
     color-scheme: dark;
     scroll-behavior: smooth;
     -webkit-tap-highlight-color: transparent;
+    /* Required by Motion's useScroll: the root scroll container needs a
+       non-static position so it can compute target offsets correctly. */
+    position: relative;
   }
 
   body {
@@ -136,4 +139,57 @@
   -webkit-backdrop-filter: blur(20px) saturate(160%);
   border: 1px solid color-mix(in oklab, var(--color-gold) 30%, transparent);
   border-radius: var(--radius-glass);
+}
+
+/* =========================================================
+   CRT scanlines — fine horizontal lines via linear-gradient.
+   Composed at the top of the Communication Terminal shell
+   with mix-blend-overlay for an authentic phosphor-tube feel.
+   ========================================================= */
+@utility scanlines {
+  background-image: linear-gradient(
+    to bottom,
+    rgba(226, 232, 240, 0.07) 0px,
+    rgba(226, 232, 240, 0.07) 1px,
+    transparent 1px,
+    transparent 3px
+  );
+  background-size: 100% 3px;
+  background-repeat: repeat;
+}
+
+/* =========================================================
+   Mesh gradient — Deep Space (purple / blue / indigo).
+   Three layered radial-gradients that read as a single
+   continuous mesh; the *-drift variants are wider so they
+   can be subtly translated by Framer Motion without showing
+   their edges.
+   ========================================================= */
+@utility mesh-gradient-base {
+  background:
+    radial-gradient(at 18% 22%, color-mix(in oklab, #6d28d9 55%, transparent) 0px, transparent 55%),
+    radial-gradient(at 82% 12%, color-mix(in oklab, #1d4ed8 50%, transparent) 0px, transparent 55%),
+    radial-gradient(at 12% 88%, color-mix(in oklab, #9333ea 45%, transparent) 0px, transparent 55%),
+    radial-gradient(at 90% 80%, color-mix(in oklab, #2563eb 45%, transparent) 0px, transparent 55%),
+    radial-gradient(at 50% 50%, color-mix(in oklab, #1e1b4b 75%, transparent) 0px, transparent 75%),
+    #000;
+  filter: saturate(115%);
+}
+
+@utility mesh-gradient-drift {
+  background:
+    radial-gradient(40% 35% at 30% 30%, rgba(124, 58, 237, 0.45) 0%, transparent 70%),
+    radial-gradient(40% 35% at 70% 60%, rgba(37, 99, 235, 0.40) 0%, transparent 70%);
+  filter: blur(42px);
+  opacity: 0.85;
+  will-change: transform;
+}
+
+@utility mesh-gradient-drift-alt {
+  background:
+    radial-gradient(35% 30% at 80% 20%, rgba(147, 51, 234, 0.38) 0%, transparent 70%),
+    radial-gradient(35% 30% at 20% 80%, rgba(67, 56, 202, 0.42) 0%, transparent 70%);
+  filter: blur(56px);
+  opacity: 0.75;
+  will-change: transform;
 }
