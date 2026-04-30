@@ -65,7 +65,7 @@ export default function FloatingSkills() {
     >
       <div className="mx-auto max-w-6xl">
         <header className="mb-16 max-w-2xl sm:mb-20 lg:mx-auto lg:text-center">
-          <p className="mb-3 text-xs uppercase tracking-[0.28em] text-accent/85">
+          <p className="mb-3 text-xs uppercase tracking-[0.28em] text-gold/80">
             The toolkit
           </p>
           <h2
