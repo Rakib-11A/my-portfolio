@@ -12,6 +12,11 @@ const RETURN_LERP = 0.075;
 const ROT_SPEED_Y = 0.045;
 const ROT_SPEED_X = 0.012;
 
+function particleJitter(index: number): number {
+  const value = Math.sin(index * 12.9898 + 78.233) * 43758.5453;
+  return value - Math.floor(value);
+}
+
 function Particles() {
   const pointsRef = useRef<THREE.Points>(null);
 
@@ -23,7 +28,7 @@ function Particles() {
     const goldenAngle = Math.PI * (Math.sqrt(5) - 1);
 
     for (let i = 0; i < PARTICLE_COUNT; i++) {
-      const r = SPHERE_RADIUS * (0.92 + Math.random() * 0.16);
+      const r = SPHERE_RADIUS * (0.92 + particleJitter(i) * 0.16);
       const yNorm = 1 - (i / (PARTICLE_COUNT - 1)) * 2;
       const ringRadius = Math.sqrt(1 - yNorm * yNorm);
       const theta = goldenAngle * i;
@@ -109,9 +114,7 @@ function Particles() {
       <bufferGeometry>
         <bufferAttribute
           attach="attributes-position"
-          array={positions}
-          count={PARTICLE_COUNT}
-          itemSize={3}
+          args={[positions, 3]}
         />
       </bufferGeometry>
       <pointsMaterial
