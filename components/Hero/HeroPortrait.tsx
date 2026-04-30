@@ -88,7 +88,7 @@ function HeroPortraitImpl({
   const auraX = useTransform(springX, [-1, 1], [38, 62]);
   const auraY = useTransform(springY, [-1, 1], [60, 40]);
   const auraBackground = useMotionTemplate`radial-gradient(circle at ${auraX}% ${auraY}%, rgba(212,175,55,0.22), rgba(16,185,129,0.10) 34%, rgba(0,0,0,0) 68%)`;
-  const imageTransform = useMotionTemplate`translate3d(${imageX}px, ${imageY}px, 42px) scale(1.04)`;
+  const imageTransform = useMotionTemplate`translate3d(${imageX}px, ${imageY}px, 58px) scale(1.02)`;
   const glassTransform = useMotionTemplate`translate3d(${glassX}px, ${glassY}px, 72px)`;
 
   const handlePointerMove = useCallback(
@@ -157,8 +157,20 @@ function HeroPortraitImpl({
               </defs>
             </svg>
 
+            <div
+              aria-hidden
+              className="absolute inset-0 bg-zinc-950/35 backdrop-blur-xl"
+              style={{
+                mask: `url(#${maskId})`,
+                WebkitMask: `url(#${maskId})`,
+                clipPath: `url(#${clipId})`,
+                WebkitClipPath: `url(#${clipId})`,
+                transform: "translateZ(18px)",
+              }}
+            />
+
             <motion.div
-              className="absolute inset-0 overflow-hidden bg-zinc-950/45 backdrop-blur-xl"
+              className="absolute inset-0 overflow-hidden bg-black/10"
               style={{
                 mask: `url(#${maskId})`,
                 WebkitMask: `url(#${maskId})`,
@@ -179,15 +191,15 @@ function HeroPortraitImpl({
                   priority
                   sizes="(min-width: 1024px) 370px, (min-width: 768px) 333px, 282px"
                   onError={handleImageError}
-                  className="object-cover object-center opacity-90 grayscale-[30%] contrast-110 transition-[filter,opacity,transform] duration-500 group-hover/portrait:scale-[1.015] group-hover/portrait:grayscale-0 group-hover/portrait:brightness-110"
+                  className="object-contain object-bottom grayscale-[12%] contrast-110 saturate-105 drop-shadow-[0_24px_55px_rgba(0,0,0,0.72)] transition-[filter,transform] duration-500 group-hover/portrait:scale-[1.012] group-hover/portrait:grayscale-0 group-hover/portrait:brightness-110"
                 />
               )}
-              <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,rgba(226,232,240,0.10),transparent_24%,rgba(0,0,0,0.30)_100%)]" />
+              <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,rgba(226,232,240,0.055),transparent_26%,rgba(0,0,0,0.14)_100%)]" />
             </motion.div>
 
             <motion.div
               aria-hidden
-              className="absolute inset-0 backdrop-blur-xl"
+              className="absolute inset-0"
               style={{
                 mask: `url(#${maskId})`,
                 WebkitMask: `url(#${maskId})`,
@@ -195,7 +207,7 @@ function HeroPortraitImpl({
                 WebkitClipPath: `url(#${clipId})`,
                 transform: glassTransform,
                 background:
-                  "linear-gradient(135deg, rgba(226,232,240,0.12), rgba(226,232,240,0.025) 34%, rgba(16,185,129,0.045) 100%)",
+                  "linear-gradient(135deg, rgba(226,232,240,0.075), rgba(226,232,240,0.012) 36%, rgba(16,185,129,0.026) 100%)",
               }}
             />
 
@@ -232,7 +244,7 @@ function HeroPortraitImpl({
 
             <div
               aria-hidden
-              className="pointer-events-none absolute inset-0 opacity-[0.16] mix-blend-screen"
+              className="pointer-events-none absolute inset-0 opacity-[0.075] mix-blend-screen"
               style={{
                 mask: `url(#${maskId})`,
                 WebkitMask: `url(#${maskId})`,

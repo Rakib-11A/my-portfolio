@@ -51,7 +51,7 @@ export default function Home() {
         className="pointer-events-none absolute inset-0 z-5 bg-[radial-gradient(ellipse_at_center,transparent_30%,rgba(5,5,5,0.85)_85%)]"
       />
 
-      <HeroPortrait />
+      <HeroPortrait imageSrc="/assets/profile.png" />
 
       <div className="pointer-events-none relative z-10 flex h-full flex-col items-center justify-center px-6 text-center">
         <motion.p
@@ -159,7 +159,7 @@ export default function Home() {
       <FloatingSkills />
 
       <section
-        id="archive"
+        id="projects"
         aria-label="The Technical Archive"
         className="relative bg-black px-6 pt-24 md:pt-32"
       >
