@@ -1,26 +1,139 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+/* =========================================================
+   Design Tokens — "Clean Minimalist Dark"
+   Tailwind v4 is CSS-first: variables declared inside @theme
+   automatically generate utility classes
+   (e.g. --color-gold → bg-gold, text-gold, ring-gold,
+    --font-display → font-display).
+   ========================================================= */
+@theme {
+  /* Surfaces */
+  --color-background: #050505;
+  --color-surface: #0a0a0a;
+  --color-elevated: #111113;
+
+  /* Text */
+  --color-foreground: #eaeaea;
+  --color-muted: #a1a1aa;
+  --color-subtle: #52525b;
+
+  /* Brand accents */
+  --color-gold: #d4af37;
+  --color-gold-soft: #b8941f;
+  --color-accent: #10b981;
+  --color-accent-soft: #059669;
+
+  /* Borders */
+  --color-border: rgba(234, 234, 234, 0.08);
+  --color-border-strong: rgba(234, 234, 234, 0.18);
+
+  /* Typography — wired to next/font CSS variables in app/layout.tsx */
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-space-grotesk), var(--font-sans);
+
+  /* Radii */
+  --radius-glass: 1rem;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+/* =========================================================
+   Base layer
+   ========================================================= */
+@layer base {
+  html {
+    color-scheme: dark;
+    scroll-behavior: smooth;
+    -webkit-tap-highlight-color: transparent;
+  }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+  body {
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-display);
+    letter-spacing: -0.02em;
+    color: var(--color-foreground);
+  }
+
+  ::selection {
+    background-color: var(--color-gold);
+    color: var(--color-background);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-gold);
+    outline-offset: 2px;
+    border-radius: 2px;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* =========================================================
+   Minimalist dark scrollbar
+   ========================================================= */
+@layer base {
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(234, 234, 234, 0.12) transparent;
+  }
+
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background-color: rgba(234, 234, 234, 0.12);
+    border-radius: 999px;
+    transition: background-color 200ms ease;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(212, 175, 55, 0.45);
+  }
+
+  ::-webkit-scrollbar-corner {
+    background: transparent;
+  }
+}
+
+/* =========================================================
+   Custom utilities — Glassmorphism
+   Tailwind v4: use @utility (replaces @layer utilities).
+   Usage:
+     <div className="glass" />
+     <div className="glass-strong" />
+     <div className="glass-gold" />
+   ========================================================= */
+@utility glass {
+  background-color: color-mix(in oklab, var(--color-surface) 60%, transparent);
+  backdrop-filter: blur(16px) saturate(140%);
+  -webkit-backdrop-filter: blur(16px) saturate(140%);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-glass);
+}
+
+@utility glass-strong {
+  background-color: color-mix(in oklab, var(--color-surface) 80%, transparent);
+  backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-glass);
+}
+
+@utility glass-gold {
+  background-color: color-mix(in oklab, var(--color-gold) 10%, transparent);
+  backdrop-filter: blur(20px) saturate(160%);
+  -webkit-backdrop-filter: blur(20px) saturate(160%);
+  border: 1px solid color-mix(in oklab, var(--color-gold) 30%, transparent);
+  border-radius: var(--radius-glass);
 }
