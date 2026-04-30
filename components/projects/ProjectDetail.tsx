@@ -7,9 +7,11 @@ import {
   useEffect,
   useMemo,
   useRef,
+  useState,
   type MouseEvent as ReactMouseEvent,
   type ReactNode,
 } from "react";
+import { createPortal } from "react-dom";
 import {
   AnimatePresence,
   animate,
@@ -73,6 +75,12 @@ const sectionVariants: Variants = {
 /* -------------------------------------------------------------------------- */
 
 function ProjectDetailImpl({ project, onClose }: ProjectDetailProps) {
+  /* ── Portal mount gate (SSR-safe) ────────────────────────────────────── */
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
   /* ── Scroll lock ─────────────────────────────────────────────────────── */
   useEffect(() => {
     const previous = document.body.style.overflow;
@@ -91,7 +99,7 @@ function ProjectDetailImpl({ project, onClose }: ProjectDetailProps) {
     return () => window.removeEventListener("keydown", onKey);
   }, [onClose]);
 
-  return (
+  const overlay = (
     <motion.div
       key={`detail-${project.id}`}
       role="dialog"
@@ -156,6 +164,11 @@ function ProjectDetailImpl({ project, onClose }: ProjectDetailProps) {
       </motion.article>
     </motion.div>
   );
+
+  // Portal at <body> root — bypasses any z-index / stacking-context inherited
+  // from the project grid (transforms, filters, contain: paint, etc.).
+  if (!mounted) return null;
+  return createPortal(overlay, document.body);
 }
 
 const ProjectDetail = memo(ProjectDetailImpl);
@@ -393,19 +406,83 @@ function CodeLens({ project }: { project: Project }) {
           </div>
         </div>
 
-        {/* Explanation panel */}
-        <aside className="flex flex-col gap-3 rounded-2xl border border-white/10 bg-white/[0.02] p-5">
-          <div className="text-[11px] uppercase tracking-[0.22em] text-subtle">
-            Why this matters
-          </div>
-          <p className="text-sm leading-relaxed text-muted">{explanation}</p>
-          <div className="mt-auto flex items-center gap-2 pt-2 text-[11px] text-subtle">
-            <span className="h-1.5 w-1.5 rounded-full bg-accent shadow-[0_0_8px_rgba(16,185,129,0.7)]" />
-            Annotated by the engineer who wrote it
-          </div>
-        </aside>
+        {/* Logic Breakdown — scales with project complexity */}
+        <LogicBreakdown
+          explanation={explanation}
+          breakdown={project.engineeringNarrative.technicalFlex}
+          complexity={project.complexity}
+        />
       </div>
     </motion.section>
+  );
+}
+
+/* ── Logic Breakdown side-panel ───────────────────────────────────────── */
+
+const COMPLEXITY_TIER = (c: number): { label: string; tone: string } => {
+  if (c >= 9) return { label: "Expert", tone: "#d4af37" };
+  if (c >= 7) return { label: "Advanced", tone: "#10b981" };
+  if (c >= 4) return { label: "Moderate", tone: "#E2E8F0" };
+  return { label: "Foundational", tone: "#a1a1aa" };
+};
+
+function LogicBreakdown({
+  explanation,
+  breakdown,
+  complexity,
+}: {
+  explanation: string;
+  breakdown: readonly string[];
+  complexity: number;
+}) {
+  const tier = COMPLEXITY_TIER(complexity);
+  // Density scales with complexity: 3 bullets at low end, all at the top.
+  const visibleBullets = useMemo(() => {
+    const count = Math.min(breakdown.length, Math.max(3, Math.ceil(complexity / 2)));
+    return breakdown.slice(0, count);
+  }, [breakdown, complexity]);
+
+  return (
+    <aside className="flex flex-col gap-4 rounded-2xl border border-white/10 bg-white/[0.02] p-5">
+      <div className="flex items-center justify-between gap-3">
+        <div className="text-[11px] uppercase tracking-[0.22em] text-subtle">
+          Logic Breakdown
+        </div>
+        <span
+          className="rounded-full border px-2.5 py-0.5 text-[10px] uppercase tracking-[0.2em]"
+          style={{
+            color: tier.tone,
+            borderColor: `${tier.tone}55`,
+            background: `${tier.tone}10`,
+            boxShadow: `0 0 18px -6px ${tier.tone}`,
+          }}
+        >
+          {tier.label} · {complexity}/10
+        </span>
+      </div>
+
+      <p className="text-sm leading-relaxed text-muted">{explanation}</p>
+
+      <ol className="flex flex-col gap-2.5 border-t border-white/[0.06] pt-4">
+        {visibleBullets.map((b, i) => (
+          <li key={b} className="flex gap-3 text-[13px] leading-relaxed text-foreground/85">
+            <span
+              aria-hidden
+              className="mt-0.5 inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-md border border-white/10 bg-black/40 font-mono text-[10px] text-gold"
+              style={{ boxShadow: "0 0 12px -4px rgba(212,175,55,0.45)" }}
+            >
+              {String(i + 1).padStart(2, "0")}
+            </span>
+            <span>{b}</span>
+          </li>
+        ))}
+      </ol>
+
+      <div className="mt-auto flex items-center gap-2 pt-1 text-[11px] text-subtle">
+        <span className="h-1.5 w-1.5 rounded-full bg-accent shadow-[0_0_8px_rgba(16,185,129,0.7)]" />
+        Annotated by the engineer who wrote it
+      </div>
+    </aside>
   );
 }
 

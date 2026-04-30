@@ -7,6 +7,7 @@ import MagneticButton from "@/components/Hero/MagneticButton";
 import Timeline from "@/components/Journey/Timeline";
 import FloatingSkills from "@/components/Skills/FloatingSkills";
 import ProjectRow from "@/components/projects/ProjectRow";
+import ContactTerminal from "@/components/Contact/ContactTerminal";
 
 const ParticleBackground = dynamic(
   () => import("@/components/Hero/ParticleBackground"),
@@ -173,6 +174,7 @@ export default function Home() {
           </header>
 
           <ProjectRow />
+          <ContactTerminal />
         </div>
       </section>
     </main>
