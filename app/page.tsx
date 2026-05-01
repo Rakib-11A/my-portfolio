@@ -131,7 +131,7 @@ export default function Home() {
             <SocialIcon href="https://github.com/Rakib-11A" label="GitHub">
               <GithubGlyph />
             </SocialIcon>
-            <SocialIcon href="https://www.linkedin.com/" label="LinkedIn">
+            <SocialIcon href="https://www.linkedin.com/in/rakib-hasan-673b1133a/" label="LinkedIn">
               <LinkedinGlyph />
             </SocialIcon>
           </div>
@@ -155,6 +155,7 @@ export default function Home() {
       </motion.div>
       </section>
 
+      <HeroPortrait imageSrc="/assets/profile.png" placement="mobile-flow" />
       <Timeline />
       <FloatingSkills />
 

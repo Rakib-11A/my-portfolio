@@ -20,6 +20,7 @@ import {
 interface HeroPortraitProps {
   readonly imageSrc?: string;
   readonly alt?: string;
+  readonly placement?: "overlay" | "mobile-flow";
 }
 
 interface SystemTag {
@@ -38,25 +39,25 @@ const VESSEL_PATH =
 const TAGS: readonly SystemTag[] = [
   {
     label: "[STATUS: ACTIVE]",
-    className: "left-1 top-8 sm:-left-8 md:-left-16 md:top-16",
+    className: "-left-18 top-8 sm:-left-10 md:-left-16 md:top-16",
     delay: 1.25,
     float: [0, -7, 0],
   },
   {
     label: "[ROLE: FULLSTACK_ENG]",
-    className: "right-0 top-2 sm:-right-10 md:-right-16 md:top-12",
+    className: "-right-20 top-2 sm:-right-12 md:-right-10 md:top-12",
     delay: 1.38,
     float: [0, 6, 0],
   },
   {
     label: "[LOC: DHAKA_BD]",
-    className: "bottom-10 left-0 sm:-left-10 md:-left-14 md:bottom-16",
+    className: "bottom-10 -left-4 sm:-left-12 md:-left-14 md:bottom-16",
     delay: 1.51,
     float: [0, 5, 0],
   },
   {
     label: "[LINK: SECURE]",
-    className: "bottom-1 right-5 sm:-right-4 md:-right-10 md:bottom-12",
+    className: "bottom-1 -right-1 sm:-right-8 md:-right-10 md:bottom-12",
     delay: 1.64,
     float: [0, -6, 0],
   },
@@ -65,6 +66,7 @@ const TAGS: readonly SystemTag[] = [
 function HeroPortraitImpl({
   imageSrc,
   alt = "Rakib Hasan portrait",
+  placement = "overlay",
 }: HeroPortraitProps) {
   const rawId = useId();
   const clipId = useMemo(
@@ -112,9 +114,14 @@ function HeroPortraitImpl({
     setImageFailed(true);
   }, []);
 
+  const rootClassName =
+    placement === "mobile-flow"
+      ? "pointer-events-none relative z-[8] flex justify-center overflow-hidden bg-background px-6 py-10 md:hidden"
+      : "pointer-events-none absolute inset-0 z-[8] hidden items-center justify-end px-6 md:flex md:px-12 md:pt-20 lg:px-20";
+
   return (
-    <div className="pointer-events-none absolute inset-0 z-[8] flex items-center justify-center px-6 pt-24 sm:pt-20 md:justify-end md:px-12 lg:px-20">
-      <div className="relative h-[min(54vw,19rem)] min-h-56 w-[min(64vw,23rem)] min-w-64 md:h-[25rem] md:w-[30rem] lg:h-[29rem] lg:w-[34rem]">
+    <div className={rootClassName}>
+      <div className="relative h-[min(54vw,19rem)] min-h-56 w-[min(64vw,23rem)] min-w-64 md:h-[25rem] md:w-[30rem] md:translate-x-4 lg:h-[29rem] lg:w-[34rem] lg:translate-x-6 xl:translate-x-6">
         <motion.div
           aria-hidden
           className="absolute inset-6 rounded-full blur-3xl will-change-transform"
@@ -127,7 +134,7 @@ function HeroPortraitImpl({
           transition={{ duration: 0.75, delay: 0.9, ease: [0.22, 1, 0.36, 1] }}
           onPointerMove={handlePointerMove}
           onPointerLeave={handlePointerLeave}
-          className="pointer-events-auto absolute left-1/2 top-1/2 h-[21rem] w-[17.6rem] -translate-x-1/2 -translate-y-1/2 outline-none will-change-transform md:h-[25rem] md:w-[20.8rem] lg:h-[28rem] lg:w-[23.2rem]"
+          className="pointer-events-auto absolute left-1/2 top-1/2 h-[18rem] w-[15.1rem] -translate-x-1/2 -translate-y-1/2 outline-none will-change-transform sm:h-[20rem] sm:w-[16.8rem] md:h-[25rem] md:w-[20.8rem] lg:h-[28rem] lg:w-[23.2rem]"
           style={{
             perspective: 900,
             transformStyle: "preserve-3d",
